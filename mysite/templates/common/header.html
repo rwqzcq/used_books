@@ -1,0 +1,4 @@
+  {% for category in latest_categorys %}
+      <li><a href="{% url 'book:list' category.id %}">{{ category.name }}</a></li>
+
+  {% endfor %}

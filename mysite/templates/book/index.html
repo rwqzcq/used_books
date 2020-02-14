@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+      <div class="jumbotron">
+        <h1>校园二手书管理系统</h1>
+        <p>本系统使用Python的Django web框架进行开发，使用的数据库为mysql，能够实现对校园二手书的有效管理！</p>
+        <p><a href="#" class="btn btn-primary btn-large">开始体验 &raquo;</a></p>
+      </div>
+
+        <div class="row">
+            <h3>最新图书</h3>
+            <hr>
+            {% load header %}
+
+            {% for latest_book in latest_books %}
+                {% book_already_have latest_book as already_amount %}
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <img width="242px" height="220px" src="/media/{{ latest_book.img }}" alt="">
+                    <div class="caption">
+                        <h4 class="text-center">{{ latest_book.name }}</h4>
+                        <p class="text-center">{{ latest_book.price }}元</p>
+                        {% if already_amount > 0 %}
+                            <p class="text-center text-success">剩余 {{ already_amount }}本</p>
+                            {% else %}
+                            <p class="text-center text-danger">已售罄</p>
+                        {% endif %}
+
+                        <p class="text-center"><a class="btn" href="{% url 'book:detail' latest_book.id %}">查看详情 &raquo;</a></p>
+                    </div>
+
+                </div>
+
+             </div>
+            {% endfor %}
+
+
+        </div>
+        <div class="row">
+        <h3>最新公告</h3><hr>
+        <ul class="list-group">
+            {% for latest_notice in latest_notices %}
+                <li class="list-group-item"><a class="page_a" href="{% url 'book:notice_detail' latest_notice.id %}">{{ latest_notice.title }}</a><span class = "pull-right">{{ latest_notice.create_at }}</span></li>
+            {% endfor %}
+
+
+        </ul>
+        </div>
+
+{% endblock %}

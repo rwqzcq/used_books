@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+    {% if message %}
+         <div class="alert alert-{% if error == 1 %}danger{% else %}success{% endif %}">{{ message }}</div>
+    {% endif %}
+        <div class="col-md-8 row">
+            <div class="col-md-6">
+                <img width="100%" src="/media/{{ book.img }}" alt="">
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item">图书名称: {{ book.name }}</li>
+                    <li class="list-group-item">图书价格: {{ book.price }}</li>
+                    <li class="list-group-item">发布时间: {{ book.create_at }}</li>
+                    <li class="list-group-item">库存数量: {{ book.amount }}</li>
+                    <li class="list-group-item">售出数量: {{ book.has_sell }}</li>
+                    {% load header %}
+                    {% book_already_have book as already_amount %}
+                    <li class="list-group-item">剩余数量: <span class="{% if already_amount == 0 %}text-danger{% else %}text-success{% endif %}">{{ already_amount }}</span></li>
+                    <li class="list-group-item text-center">
+                    {% if request.user.is_authenticated %}
+                        {% if already_amount == 0 %}
+                            <a href="#" class="btn btn-danger">已售完!不可订购!请等待!</a>
+                            {% else %}
+                            <a href="" class="btn btn-success" data-toggle="modal" data-target="#myModal">订购</a>
+                        {% endif %}
+                        {% else %}
+                            <a href="#" class="btn btn-danger">未登录!不可订购</a>
+                            <a href="{% url 'account:login' %}" class="btn btn-primary">登录</a>
+                    {% endif %}
+
+
+                    </li>
+                </ul>
+                <div class="btn-group">
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3>订购详情</h3>
+            <ul class="list-group">
+            {% if book.order_book.count == 0 %}
+                <h4 class="text-danger">暂无人购买</h4>
+                {% else %}
+                {% for order in book.order_book.all %}
+                    <li class="list-group-item">
+                    {{ order.user.username }} 于 {{ order.create_at }} 订购 {{ order.amount }}本
+                    </li>
+
+                {% endfor %}
+            {% endif %}
+
+            </ul>
+        </div>
+
+    </div>
+    <h3>图书描述</h3>
+    <hr>
+    <div class="row">
+    {{ book.description|safe }}
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">订购{{ book.name }}</h4>
+           <div class="h4 alert-danger">订购后不可取消!</div>
+      </div>
+        <form id="comment_form" action="{% url 'book:buy' %}" method="post">
+          <div class="modal-body">
+
+                  <input type="hidden" name = "book_id" value="{{ book.id }}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <input type="number" name="amount" min="1" max="{{ already_amount }}" required placeholder="最多订购{{ already_amount }}本" class="form-control">
+                  </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" id="comment_btn" class="btn btn-primary">提交</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<!-- /申请 -->
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<ul class="list-group">
+    {% for c in categorys %}
+        <li
+
+                {% if current_cid == c.id %}
+                    style = "background-color: #31b0d5"
+                {% endif %}
+                class="list-group-item"><a class="page_a" href="{% url 'book:list' c.id %}">{{ c.name }}</a></li>
+    {% endfor %}
+
+    <script>
+        $(function(){
+            ;
+        });
+    </script>
+
+</ul>

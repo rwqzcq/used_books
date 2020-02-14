@@ -17,7 +17,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from mysite import settings
+from django.conf.urls import include
+from book.views import index
 
 urlpatterns = [
+    path('', index, name = "index"),
     path('admin/', admin.site.urls),
+    path('book/', include('book.urls')),
+    path('account/', include('account.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL) # 配置静态资源的路径

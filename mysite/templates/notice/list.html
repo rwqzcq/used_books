@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <h3>本站公告</h3>
+        <hr>
+        <ul class="list-group">
+            {% for latest_notice in notices %}
+                <li class="list-group-item">{{ forloop.counter }}. <a class="page_a" href="{% url 'book:notice_detail' latest_notice.id %}">{{ latest_notice.title|truncatewords:8 }}</a><span class = "pull-right">{{ latest_notice.create_at }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

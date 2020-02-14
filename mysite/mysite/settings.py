@@ -65,7 +65,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries' : {
+                'header' : 'templatetags.header', # 注册TemplateTag
+                'menu' : 'templatetags.menu',
+            },
         },
+
     },
 ]
 
@@ -127,4 +132,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace("\\", "/")
 
 MEDIA_URL = '/media/'
 
-#LOGIN_URL = '/account/login/'
+LOGIN_URL = '/account/login/'

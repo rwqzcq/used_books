@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load header %}
+<div class="row">
+    <div class="col-md-2">
+        <div class="navbar-fixed">
+        <h4>所有分类</h4>
+        {% load menu %}
+        {% all_categorys request.session.current_cid %}
+        </div>
+
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="h3"><span class="text-success">{{ message }}</span>的检索结果</div>
+
+                {% endfor %}
+            {% endif %}
+            {% for latest_book in books %}
+                {% book_already_have latest_book as already_amount %}
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <img src="/media/{{ latest_book.img }}" alt="">
+                    <div class="caption">
+                        <h4 class="text-center">{{ latest_book.name }}</h4>
+                        <p class="text-center">{{ latest_book.price }}元</p>
+                        {% if already_amount > 0 %}
+                            <p class="text-center text-success">剩余 {{ already_amount }}本</p>
+                            {% else %}
+                            <p class="text-center text-danger">已售罄</p>
+                        {% endif %}
+
+                        <p class="text-center"><a class="btn btn-primary" href="{% url 'book:detail' latest_book.id %}">查看详情 &raquo;</a></p>
+                    </div>
+
+                </div>
+             </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
